@@ -1475,9 +1475,13 @@ const DEFAULT_CLAUDE_KEY = 'sk-ant-api03-TnT70fUEhUMttHhCR-WrfZ80Jtv0MhjKVBEK4Bd
 const DEFAULT_OPENAI_KEY = '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';
 
 function getApiKey() {
-  return currentEngine === 'openai'
-    ? localStorage.getItem('pp_openai_key') || DEFAULT_OPENAI_KEY
-    : localStorage.getItem('pp_claude_key') || DEFAULT_CLAUDE_KEY;
+  if (currentEngine === 'openai') {
+    const k = localStorage.getItem('pp_openai_key') || '';
+    return k.length > 20 ? k : DEFAULT_OPENAI_KEY;
+  } else {
+    const k = localStorage.getItem('pp_claude_key') || '';
+    return k.length > 20 ? k : DEFAULT_CLAUDE_KEY;
+  }
 }
 
 function selectEngine(eng) {
