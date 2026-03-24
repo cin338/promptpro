@@ -1543,11 +1543,9 @@ function saveApiKey() {
 // 核心：透過 GAS 中繼呼叫 AI API（解決 CORS）
 // ══════════════════════════════════════
 async function callAI({ system, messages, onChunk, onDone }) {
-  const resp = await fetch(GAS_ENDPOINT, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify({ type: 'api_proxy', engine: currentEngine, system, messages })
-  });
+  const payload = encodeURIComponent(JSON.stringify({ system, messages }));
+  const url = `${GAS_ENDPOINT}?type=api_proxy&engine=${currentEngine}&data=${payload}`;
+  const resp = await fetch(url);
 
   if (!resp.ok) throw new Error(`GAS 錯誤 ${resp.status}`);
 
